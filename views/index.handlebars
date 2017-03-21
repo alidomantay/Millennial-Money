@@ -1,0 +1,277 @@
+
+<div class="row">
+  <div class="col-md-6 col-xs-12">
+    <div class="form-container center-block">
+      <h2 class="text-center"><strong>EXPENSES</strong></h2>
+      <form action="/expense" method="post" id="expenseForm">
+        <div class="form-group">
+          <label for="amount">Amount</label>
+          <div class="input-group">
+            <span class="input-group-addon">₱</span>
+            <input name="amount" type="number" class="form-control input-sm" id="expenseAmount" placeholder="Amount" required>
+            <span class="input-group-addon">.</span>
+            <input name="decimal" type="number" class="form-control input-sm" id="expenseDecimal" min="0" max="99" value="00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="date">Date </label>
+          <input name="date" type="date" class="form-control input-sm" id="expenseDate" required>
+        </div>
+        <div class="form-group">
+          <label for="itemCategory">Category</label>
+          <select name="category" class="form-control input-sm" id="category" required>
+            <option value="1">Travel</option>
+            <option value="2">Meals</option>
+            <option value="3">Shopping</option>
+            <option value="4">Bill/Utilities</option>
+            <option value="5">Other Fees</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-default btn-sm" id="expense-submit">Add!</button> <span class="badge"></span>
+      </form>
+      <div class="chart-data-container">
+        <div class="pull-right">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+              Frequency<span class="caret"></span>
+            </button>
+            <ul id="expenseFreqDrop" class="dropdown-menu pull-right" role="menu">
+              <li><a id="expenseDaily">Daily</a>
+              </li>
+              <li><a id="expenseWeekly">Weekly</a>
+              </li>
+              <li><a id="expenseMonthly">Monthly</a>
+              </li>
+              <li><a id="expenseAll">All</a>
+              </li>
+            </ul>
+          </div>
+          <button id="viewExpenseTable" type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#expenseModal">
+            View Table
+          </button>
+        </div>
+        <div class="chart-container">
+          <div id="expense-donut"></div>
+        </div>
+        <h3 class="text-center">Total <span id="expenseTime"></span> Expenses: <b><span id="expenseTotal" class="">₱0</span></b></h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xs-12">
+    <div class="form-container center-block">
+      <h2 class="text-center"><strong>SAVINGS</strong></h2>
+      <form action="/savings" method="post" id="savingsForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input name="name" type="text" class="form-control input-sm" id="name" placeholder="Name" required>
+        </div>
+        <div class="form-group">
+          <label for="saveAmount">Amount</label>
+          <div class="input-group">
+            <span class="input-group-addon" id="sizing-addon1">₱</span>
+            <input name="amount" type="number" class="form-control input-sm" id="saveAmount" placeholder="Amount" required>
+            <span class="input-group-addon">.</span>
+            <input name="decimal" type="number" class="form-control input-sm" id="saveDecimal" min="0" max="99" value="00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="saveDate">Date</label>
+          <input name="date" type="date" class="form-control input-sm" id="saveDate" value="2000-01-01" required>
+        </div>
+        <button type="submit" class="btn btn-default btn-sm" id="save-submit">Add!</button> <span class="badge"></span>
+      </form>
+      <div class="chart-data-container">
+        <div class="pull-right">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+              Frequency <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a id="savingsDaily">Daily</a>
+              </li>
+              <li><a id="savingsWeekly">Weekly</a>
+              </li>
+              <li><a id="savingsMonthly">Monthly</a>
+              </li>
+              <li><a id="savingsAll">All</a>
+              </li>
+            </ul>
+          </div>
+          <button id="viewSavingsTable" type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#savingsModal">
+            View Table
+          </button>
+        </div>
+        <div class="chart-container">
+          <div id="savings-donut"></div>
+        </div>
+        <h3 class="text-center">Total <span id="savingsTime"></span> Savings: <b><span id="savingsTotal">₱0</span></b></h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" id="expenseModal" tabindex="-1" role="dialog" aria-labelledby="expenseModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="expenseModalLabel">Expense Record</h4>
+      </div>
+      <div class="modal-body">
+        <div id="expenseTable">
+          <table class="table table-scroll table-bordered table-hover">
+            <thead class="table">
+              <th class="sort col-xs-3" data-sort="amount">Amount<span></span></th>
+              <th class="sort col-xs-3" data-sort="date">Date<span></span></th>
+              <th class="sort col-xs-3" data-sort="category">Category<span></span></th>
+            </thead>
+            <tbody class="list">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button disabled id="btnEdit" type="button" class="crudBtn btn btn-default pull-left" data-toggle="modal" data-target="#expenseRecord">Edit</button>
+        <button disabled id="btnDelete" type="button" class="crudBtn btn btn-default pull-left" data-toggle="modal" data-target="#expenseRecord">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="savingsModal" tabindex="-1" role="dialog" aria-labelledby="savingsModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="savingsModalLabel">Savings Record</h4>
+      </div>
+      <div class="modal-body">
+        <div id="savingsTable">
+          <table class="table table-scroll table-bordered table-hover">
+            <thead class="table">
+              <th class="sort col-xs-3" data-sort="name">Name<span></span></th>
+              <th class="sort col-xs-3" data-sort="amount">Amount<span></span></th>
+              <th class="sort col-xs-3" data-sort="date">Date<span></span></th>
+            </thead>
+            <tbody class="list">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button disabled id="btnEdit" type="button" class="crudBtn btn btn-default pull-left" data-toggle="modal" data-target="#savingsRecord">Edit</button>
+        <button disabled id="btnDelete" type="button" class="crudBtn btn btn-default pull-left" data-toggle="modal" data-target="#savingsRecord">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="accountLabel">Change Password</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/users/changepass" method="post">
+          <div class="form-group">
+            <label for="password">New Password</label>
+            <input name="password" type="password" class="form-control input-sm" id="changePW" required>
+          </div>
+          <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            <input name="password2" type="password" class="form-control input-sm" id="changePW2" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-xs" id="save-submit">Change</button> <span class="badge"></span>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="expenseRecord" tabindex="-1" role="dialog" aria-labelledby="expenseRecordLbl">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="expenseRecordLbl"></h4>
+      </div>
+      <div class="modal-body">
+        <form action="/" method="post">
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <div class="input-group">
+              <span class="input-group-addon">₱</span>
+              <input name="amount" type="number" class="form-control input-sm" id="expenseRecAmount" placeholder="Amount" required>
+              <span class="input-group-addon">.</span>
+              <input name="decimal" type="number" class="form-control input-sm" id="expenseRecDecimal" min="0" max="99" value="00" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="date">Date </label>
+            <input name="date" type="date" class="form-control input-sm" id="expenseRecDate" required>
+          </div>
+          <div class="form-group">
+            <label for="itemCategory">Category</label>
+            <select name="category" class="form-control input-sm" id="categoryRec" required>
+              <option value="1">Travel</option>
+              <option value="2">Meals</option>
+              <option value="3">Shopping</option>
+              <option value="4">Bill/Utilities</option>
+              <option value="5">Other Fees</option>
+            </select>
+          </div>
+          <input type="text" id="idExpHolder" name="id" hidden>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-default " id="expRecSubmit">Submit</button> <span class="badge"></span>
+        </form>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="savingsRecord" tabindex="-1" role="dialog" aria-labelledby="savingsRecordLbl">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="savingsRecordLbl"></h4>
+      </div>
+      <div class="modal-body">
+        <form action="/" method="post">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input name="name" type="text" class="form-control input-sm" id="nameRec" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+            <label for="saveAmount">Amount</label>
+            <div class="input-group">
+              <span class="input-group-addon" id="sizing-addon1">₱</span>
+              <input name="amount" type="number" class="form-control input-sm" id="saveRecAmount" placeholder="Amount" required>
+              <span class="input-group-addon">.</span>
+              <input name="decimal" type="number" class="form-control input-sm" id="saveRecDecimal" min="0" max="99" value="00" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="saveDate">Date</label>
+            <input name="date" type="date" class="form-control input-sm" id="saveRecDate" value="2000-01-01" required>
+          </div>
+          <input type="text" id="idSavHolder" name="id" hidden>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-default " id="savRecSubmit">Submit</button> <span class="badge"></span>
+        </form>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

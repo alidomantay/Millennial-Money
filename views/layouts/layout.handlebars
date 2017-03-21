@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Millennial Money</title>
+	<link rel="stylesheet" href="/css/bootstrap/css/bootstrap.min.css">
+	{{#if user}}
+	<link href="/css/custom-css.css" rel="stylesheet">
+	{{else}}
+	<link rel="stylesheet" href="/css/style.css" />
+	{{/if}}
+	<link href="/css/morrisjs/morris.css" rel="stylesheet">
+
+</head>
+<body>
+
+	<div class="col-lg-12">
+		{{#if success_msg}}
+		<div class="alert alert-success text-center">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>{{success_msg}}</div>
+			{{/if}}
+
+			{{#if error_msg}}
+			<div class="alert alert-danger text-center">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>{{error_msg}}</div>
+				{{/if}}
+
+				{{#if error}}
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>{{error}}</div>
+					{{/if}}
+				</div>
+			</div>
+
+			<div class="container">
+				<div id="ui-container" class="panel panel-default">
+					<div class="panel-heading">
+						<b>{{#if user}}
+							Hi {{username}}, Welcome to Millennial Money!</b>
+							{{else}}
+							Welcome to Millennial Money!
+							{{/if}}</b>
+							<div class="pull-right">
+								<div class="btn-group">
+									{{#if user}}
+									<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+										Options
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu pull-right" role="menu">
+										<li><a href="/">Dashboard</a>
+										</li>
+										<li><a href="#" data-toggle="modal" data-target="#accountModal">Change Password</a>
+										</li>
+										<li><a href="/users/logout">Logout</a>
+										</li>
+									</ul>
+									{{else}}
+									<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+										Menu
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu pull-right" role="menu">
+										<li><a href="/users/login">Login</a></li>
+										<li><a href="/users/register">Register</a></li>
+									</ul>
+									{{/if}}
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							{{{body}}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/js/jquery/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	{{#if user}}
+	<script>
+	var expenseServToClient = {{{expenseString}}};
+	var savingsServToClient = {{{savingsString}}};
+	</script>
+	<script src="/js/global.js"></script>
+	<script src="/js/raphael/raphael.min.js"></script>
+	<script src="/js/listjs/list.min.js"></script>
+	<script src="/js/morrisjs/morris.min.js"></script>
+	<script src="/js/moment/moment.min.js"></script>
+	<script src="/js/whatFreq.js"></script>
+	<script src="/js/miliMoney.js"></script>
+	<script src="/js/donuts.js"></script>
+	<script src="/js/table-data.js"></script>
+	{{/if}}
+
+</body>
