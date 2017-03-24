@@ -1,4 +1,4 @@
-$('body').ready(function(e){
+$('body').ready(function(){
 
 	$(document).click(function(e) {
 		if(!$(e.target).is('td, .crudBtn, .modal *')) {
@@ -30,7 +30,7 @@ $('body').ready(function(e){
 	});
 
 	$('#expenseModal .crudBtn').on('click', function() {
-		$('#expenseRecord select, #expenseRecord input').removeAttr('readonly');
+		$('#expenseRecord select, #expenseRecord input').removeAttr('disabled readonly');
 		$('#expRecSubmit').text('Submit');
 		if ($(this).is('#btnEdit')) {
 			$('#expenseRecord form').attr("action", "/updateExpense	");
@@ -41,7 +41,7 @@ $('body').ready(function(e){
 			$('#expenseRecAmount').val(amount[0]);
 			$('#expenseRecDecimal').val(amount[1]);
 			$('#expenseRecDate').val($('.clicked .date').text());
-			$('#categoryRec').val($('.clicked .category').text());
+			$('#categoryRec').val($('.clicked .category').data('catIndex'));
 		}else {
 			$('#expenseRecord form').attr("action", "/deleteExpense");
 			$('#expenseRecord .modal-title').text('Delete This Record?');
@@ -50,9 +50,10 @@ $('body').ready(function(e){
 			$('#expenseRecAmount').val(amount[0]);
 			$('#expenseRecDecimal').val(amount[1]);
 			$('#expenseRecDate').val($('.clicked .date').text());
-			$('#categoryRec').val($('.clicked .category').text());
+			$('#categoryRec').val($('.clicked .category').data('catIndex'));
 			$('#expRecSubmit').text('Yes');
-			$('#expenseRecord select, #expenseRecord input').attr('readonly', 'true');
+			$('#expenseRecord input').attr('readonly', 'true');
+			$('#expenseRecord select').attr('disabled', 'true');
 		}
 	});
 
@@ -151,6 +152,8 @@ $('body').ready(function(e){
 
 	retrieveExpenseData();
 	retrieveSavingsData();
+	whatCategory();
+
 });
 
 function retrieveExpenseData() {
@@ -164,5 +167,35 @@ function retrieveSavingsData() {
 
 	savingsDaWeMo = savingsServToClient;
 	whatSavingsFreq(savingsDaWeMo);
+
+}
+
+function whatCategory() {
+
+	$('#expenseTable .category').each(function(){
+		var cat = $(this).text();
+		switch (cat) {
+			case '1':
+			$(this).data('catIndex', '1');
+			$(this).text('Travel');
+			break;
+			case '2':
+			$(this).data('catIndex', '2');
+			$(this).text('Meals');
+			break;
+			case '3':
+			$(this).data('catIndex', '3');
+			$(this).text('Shopping');
+			break;
+			case '4':
+			$(this).data('catIndex', '4');
+			$(this).text('Bills/Utilities');
+			break;
+			case '5':
+			$(this).data('catIndex', '5');
+			$(this).text('Others');
+			break;
+		}
+	});
 
 }
